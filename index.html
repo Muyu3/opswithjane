@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ops With Jane — Clarity, Structure, and Systems That Work.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #E95420;
+      --orange-light: #FF6B35;
+      --black: #0A0A0A;
+      --white: #FAFAF8;
+      --cream: #F5F0E8;
+      --gray: #6B6B6B;
+      --light-gray: #E8E4DC;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--orange);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--orange);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      transform: translate(-50%, -50%);
+      opacity: 0.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mix-blend-mode: normal;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex; gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--orange);
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--orange); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-left {
+      padding: 6rem 3rem 4rem 5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 2rem; height: 1px;
+      background: var(--orange);
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--gray);
+      max-width: 420px;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: white;
+      padding: 0.95rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 2px solid var(--orange);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--black);
+      padding: 0.95rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 2px solid var(--black);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-secondary:hover {
+      background: var(--black);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .hero-right {
+      position: relative;
+      background: var(--black);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-right-inner {
+      position: relative;
+      z-index: 2;
+      padding: 4rem;
+      text-align: center;
+    }
+
+    .hero-logo-display {
+      width: 280px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1s forwards;
+      filter: invert(1);
+    }
+
+    .hero-right-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(233,84,32,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(233,84,32,0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .hero-right-accent {
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border: 2px solid var(--orange);
+      opacity: 0.2;
+      border-radius: 50%;
+    }
+    .hero-right-accent2 {
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 200px; height: 200px;
+      border: 1px solid var(--orange);
+      opacity: 0.15;
+      border-radius: 50%;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+    .stat {
+      border-left: 2px solid var(--orange);
+      padding-left: 1rem;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--gray);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      background: var(--orange);
+      padding: 0.9rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: white;
+      padding: 0 2.5rem;
+    }
+    .marquee-dot {
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* WHAT I DO */
+    .section-what {
+      padding: 8rem 5rem;
+      background: var(--white);
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 2rem; height: 1px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 4rem;
+      max-width: 600px;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--light-gray);
+    }
+
+    .service-card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--light-gray);
+      border-bottom: 1px solid var(--light-gray);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .service-card:nth-child(3n) { border-right: none; }
+    .service-card:nth-last-child(-n+3) { border-bottom: none; }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--orange);
+      transition: width 0.4s ease;
+    }
+    .service-card:hover::before { width: 100%; }
+    .service-card:hover { background: var(--cream); }
+
+    .service-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--orange);
+      letter-spacing: 0.15em;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--gray);
+    }
+
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+    }
+    .tag {
+      font-size: 0.68rem;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--light-gray);
+      color: var(--gray);
+      text-transform: uppercase;
+    }
+
+    /* WHO I WORK WITH */
+    .section-who {
+      padding: 8rem 5rem;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .section-who .section-label { color: var(--orange); }
+    .section-who .section-title { color: var(--white); }
+
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.1);
+      margin-top: 1rem;
+    }
+
+    .client-card {
+      background: var(--black);
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .client-card:hover { background: #111; }
+
+    .client-flag {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .client-market {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .client-type {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+    }
+
+    .client-line {
+      width: 2rem; height: 2px;
+      background: var(--orange);
+      margin-bottom: 1.2rem;
+    }
+
+    /* WHY ME */
+    .section-why {
+      padding: 8rem 5rem;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .why-text .section-title { max-width: 100%; }
+
+    .why-body {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .why-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .why-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .why-list li::before {
+      content: '→';
+      color: var(--orange);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .why-visual {
+      position: relative;
+    }
+
+    .why-card {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      padding: 2rem;
+      margin-bottom: 1rem;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .why-card:hover {
+      transform: translateX(8px);
+      box-shadow: -4px 0 0 var(--orange);
+    }
+
+    .why-card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--orange);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-card-body {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* PORTFOLIO */
+    .section-portfolio {
+      padding: 8rem 5rem;
+      background: var(--white);
+      text-align: center;
+    }
+
+    .portfolio-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .portfolio-inner .section-label {
+      justify-content: center;
+    }
+    .portfolio-inner .section-label::before { display: none; }
+
+    .portfolio-inner .section-title {
+      max-width: 100%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .portfolio-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--gray);
+      margin-bottom: 3rem;
+    }
+
+    .portfolio-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--black);
+      color: white;
+      padding: 1.2rem 2.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .portfolio-link:hover {
+      background: var(--orange);
+      transform: translateY(-3px);
+    }
+    .portfolio-link::after {
+      content: '↗';
+      font-size: 1rem;
+    }
+
+    /* CTA */
+    .section-cta {
+      padding: 8rem 5rem;
+      background: var(--orange);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 18vw;
+      font-weight: 900;
+      color: rgba(255,255,255,0.05);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: -0.05em;
+    }
+
+    .cta-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: white;
+      color: var(--orange);
+      padding: 1.2rem 2.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      z-index: 2;
+    }
+    .cta-email:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      padding: 3rem 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.05em;
+    }
+    .footer-logo span { color: var(--orange); }
+
+    .footer-tagline {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--orange); }
+
+    /* TOOLS */
+    .section-tools {
+      padding: 8rem 5rem;
+      background: var(--cream);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .tool-category {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      padding: 2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tool-category:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .tool-cat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .tool-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tool-pill {
+      background: var(--cream);
+      border: 1px solid var(--light-gray);
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--black);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .tool-pill:hover {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .section-tools { padding: 5rem 1.5rem; }
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 7rem 1.5rem 3rem; }
+      .hero-right { display: none; }
+      .section-what, .section-who, .section-why, .section-portfolio, .section-cta { padding: 5rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; }
+      .clients-grid { grid-template-columns: 1fr; }
+      .section-why { grid-template-columns: 1fr; gap: 3rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo"><span>ops</span>withjane</a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#who">Clients</a></li>
+      <li><a href="#why">About</a></li>
+      <li><a href="https://tinyurl.com/opswithjane" target="_blank">Portfolio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-tag">Remote VA · Est. 2026 · Nairobi, Kenya</p>
+      <h1 class="hero-headline">
+        Your ops,<br>
+        finally <em>sorted.</em>
+      </h1>
+      <p class="hero-sub">
+        I'm Jane — a remote Operations VA who builds the systems, handles the admin, and keeps your business running cleanly while you focus on what actually moves the needle.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://calendar.app.google/bYBSqHfwz5yTSk7t7" target="_blank" class="btn-primary">Book a Free Call</a>
+        <a href="https://tinyurl.com/opswithjane" target="_blank" class="btn-secondary">View Portfolio ↗</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Markets Served</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Roles Supported</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Remote Ready</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-right-grid"></div>
+      <div class="hero-right-accent"></div>
+      <div class="hero-right-accent2"></div>
+      <div class="hero-right-inner">
+        <img src="https://tinyurl.com/opswithjane" alt="Ops With Jane" class="hero-logo-display"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+        <div style="display:none; color:white; font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; line-height:1.1;">
+          <span style="color:#E95420;">ops</span><br>with jane.
+        </div>
+        <p style="color:rgba(255,255,255,0.4); font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; margin-top:2rem;">Clarity · Structure · Systems</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">CRM Management <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Inbox Zero <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Lead Generation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Appointment Setting <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Process Documentation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Social Media <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Real Estate Admin <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">HubSpot · Airtable · GHL <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">CRM Management <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Inbox Zero <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Lead Generation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Appointment Setting <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Process Documentation <span class="marquke-dot">◆</span></span>
+      <span class="marquee-item">Social Media <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Real Estate Admin <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">HubSpot · Airtable · GHL <span class="marquee-dot">◆</span></span>
+    </div>
+  </div>
+
+  <!-- WHAT I DO -->
+  <section class="section-what" id="services">
+    <p class="section-label reveal">What I Do</p>
+    <h2 class="section-title reveal">Everything behind the scenes<br>that <em>keeps you moving.</em></h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-number">01</div>
+        <div class="service-icon">⚙️</div>
+        <h3 class="service-title">Operations & Admin</h3>
+        <p class="service-desc">Inbox management, scheduling, document organization, SOP creation, and the daily operational work that keeps your business from falling apart.</p>
+        <div class="service-tags">
+          <span class="tag">Google Workspace</span>
+          <span class="tag">Notion</span>
+          <span class="tag">Asana</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">02</div>
+        <div class="service-icon">🎯</div>
+        <h3 class="service-title">CRM & Lead Management</h3>
+        <p class="service-desc">Setting up and maintaining your CRM, tracking leads, following up with prospects, and making sure no opportunity slips through the cracks.</p>
+        <div class="service-tags">
+          <span class="tag">HubSpot</span>
+          <span class="tag">GoHighLevel</span>
+          <span class="tag">Airtable</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">03</div>
+        <div class="service-icon">📞</div>
+        <h3 class="service-title">Appointment Setting</h3>
+        <p class="service-desc">Outbound DM and email outreach, lead qualification, and booking qualified appointments directly into your calendar. No closing — just clean handoffs.</p>
+        <div class="service-tags">
+          <span class="tag">Cold Outreach</span>
+          <span class="tag">DM Outreach</span>
+          <span class="tag">Follow-Up</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">04</div>
+        <div class="service-icon">📊</div>
+        <h3 class="service-title">Finance & Billing Support</h3>
+        <p class="service-desc">Invoice tracking, reconciliation support, payment follow-ups, and financial record-keeping — backed by a BSc Mathematics for precision you can trust.</p>
+        <div class="service-tags">
+          <span class="tag">Invoicing</span>
+          <span class="tag">Reconciliation</span>
+          <span class="tag">Excel</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">05</div>
+        <div class="service-icon">📱</div>
+        <h3 class="service-title">Social Media & Content</h3>
+        <p class="service-desc">Branded graphics, Reels and short-form video, content calendars, scheduling, and daily engagement — consistent presence without the daily effort.</p>
+        <div class="service-tags">
+          <span class="tag">Canva</span>
+          <span class="tag">CapCut</span>
+          <span class="tag">Instagram</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">06</div>
+        <div class="service-icon">🏠</div>
+        <h3 class="service-title">Real Estate Admin</h3>
+        <p class="service-desc">Listing coordination, client communication, showing scheduling, transaction documentation, and CRM updates for agents who need everything handled.</p>
+        <div class="service-tags">
+          <span class="tag">Transaction Coord</span>
+          <span class="tag">Client Comms</span>
+          <span class="tag">Records</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section-tools" id="tools">
+    <p class="section-label reveal">My Stack</p>
+    <h2 class="section-title reveal">Tools I work with<br><em>every single day.</em></h2>
+    <div class="tools-grid">
+
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">CRM & Operations</div>
+        <div class="tool-pills">
+          <span class="tool-pill">HubSpot</span>
+          <span class="tool-pill">GoHighLevel</span>
+          <span class="tool-pill">Airtable</span>
+          <span class="tool-pill">Zoho CRM</span>
+          <span class="tool-pill">Apollo.io</span>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Project Management</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Notion</span>
+          <span class="tool-pill">ClickUp</span>
+          <span class="tool-pill">Asana</span>
+          <span class="tool-pill">Trello</span>
+          <span class="tool-pill">Monday.com</span>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Communication</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Slack</span>
+          <span class="tool-pill">Zoom</span>
+          <span class="tool-pill">Google Meet</span>
+          <span class="tool-pill">Microsoft Teams</span>
+          <span class="tool-pill">Loom</span>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Design & Content</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Canva</span>
+          <span class="tool-pill">CapCut</span>
+          <span class="tool-pill">Later</span>
+          <span class="tool-pill">Metricool</span>
+          <span class="tool-pill">Mailchimp</span>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Admin & Productivity</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Google Workspace</span>
+          <span class="tool-pill">Microsoft Office</span>
+          <span class="tool-pill">Zapier</span>
+          <span class="tool-pill">ManyChat</span>
+          <span class="tool-pill">Calendly</span>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Finance & Data</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Excel (Advanced)</span>
+          <span class="tool-pill">Google Sheets</span>
+          <span class="tool-pill">QuickBooks</span>
+          <span class="tool-pill">Stripe</span>
+          <span class="tool-pill">Xero (Learning)</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHO I WORK WITH -->
+  <section class="section-who" id="who">
+    <p class="section-label reveal">Who I Work With</p>
+    <h2 class="section-title reveal">Founders and operators<br>across <em>5 markets.</em></h2>
+    <div class="clients-grid">
+      <div class="client-card reveal">
+        <div class="client-flag">🇺🇸</div>
+        <div class="client-line"></div>
+        <div class="client-market">United States</div>
+        <div class="client-type">Real estate agents · Dental practices · Online coaches · SaaS founders · Marketing agencies</div>
+      </div>
+      <div class="client-card reveal">
+        <div class="client-flag">🇦🇪</div>
+        <div class="client-line"></div>
+        <div class="client-market">UAE</div>
+        <div class="client-type">Property developers · Real estate agencies · Mortgage brokers · Business consultancies</div>
+      </div>
+      <div class="client-card reveal">
+        <div class="client-flag">🇬🇧</div>
+        <div class="client-line"></div>
+        <div class="client-market">United Kingdom</div>
+        <div class="client-type">Digital marketing agencies · Accountancy firms · Consultancies · Service-based businesses</div>
+      </div>
+      <div class="client-card reveal">
+        <div class="client-flag">🇨🇦</div>
+        <div class="client-line"></div>
+        <div class="client-market">Canada</div>
+        <div class="client-type">Mortgage brokers · Insurance agencies · Small law firms · E-commerce brands</div>
+      </div>
+      <div class="client-card reveal" style="border-bottom:none;">
+        <div class="client-flag">🇦🇺</div>
+        <div class="client-line"></div>
+        <div class="client-market">Australia</div>
+        <div class="client-type">Trades businesses · Real estate agencies · Allied health clinics · Coaching businesses</div>
+      </div>
+      <div class="client-card reveal" style="border-bottom:none; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;">
+          <p style="font-family:'Playfair Display',serif; font-size:1.8rem; color:white; font-weight:900; font-style:italic; margin-bottom:0.5rem;">"Your timezone.<br>My problem to solve."</p>
+          <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase;">— Jane Kenda</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY ME -->
+  <section class="section-why" id="why">
+    <div class="why-text">
+      <p class="section-label reveal">Why Me</p>
+      <h2 class="section-title reveal">Not just a VA.<br>A <em>systems thinker.</em></h2>
+      <p class="why-body reveal">
+        I graduated with a BSc Mathematics from the University of Nairobi in 2025. Before I was a VA, I was trained to find structure in complexity — and that's exactly what I bring to every client engagement.
+      </p>
+      <p class="why-body reveal">
+        I don't just complete tasks. I build the workflows, trackers, and processes that mean you stop thinking about the admin entirely.
+      </p>
+      <ul class="why-list reveal">
+        <li>HubSpot Email Marketing Certified</li>
+        <li>Trained in EVA (Executive Virtual Assistance) at Salas Staffing</li>
+        <li>ALX Virtual Assistant Program — Completed ✓</li>
+        <li>ALX AI Career Essentials — Completed ✓</li>
+        <li>Experienced across real estate, marketing, finance, and clinical admin</li>
+        <li>Available across US, UK, UAE, Canadian & Australian time zones</li>
+      </ul>
+    </div>
+    <div class="why-visual">
+      <div class="why-card reveal">
+        <div class="why-card-title">The Math Advantage</div>
+        <div class="why-card-body">A BSc Mathematics isn't just a degree — it's a precision mindset applied to every spreadsheet, every reconciliation, and every system built.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-title">Process-First Thinking</div>
+        <div class="why-card-body">I document everything. Every workflow I build becomes a system your business owns — not knowledge locked in my head.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-title">Reliability Over Flash</div>
+        <div class="why-card-body">I show up, I communicate proactively, and I deliver on time. The best VA is the one you stop thinking about — because everything just gets done.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-title">Remote Since Day One</div>
+        <div class="why-card-body">I've built my entire career in distributed, async environments. Remote work isn't an adjustment for me — it's my natural habitat.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="section-portfolio" id="portfolio">
+    <div class="portfolio-inner">
+      <p class="section-label reveal">Portfolio</p>
+      <h2 class="section-title reveal">See the work.<br><em>Judge for yourself.</em></h2>
+      <p class="portfolio-body reveal">
+        From Airtable lead trackers to SOP documentation, social media systems to real estate admin workflows — my portfolio shows the actual work, not just the pitch.
+      </p>
+      <a href="https://tinyurl.com/opswithjane" target="_blank" class="portfolio-link reveal">
+        View Full Portfolio
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta" id="contact">
+    <div class="cta-bg-text">ops</div>
+    <p class="cta-label">Ready to get started?</p>
+    <h2 class="cta-title">Let's build something<br>that actually works.</h2>
+    <p class="cta-sub">Whether you need 5 hours a month or full-time ops support — let's have a 15-minute call and figure out if we're a fit.</p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; z-index:2;">
+      <a href="https://calendar.app.google/bYBSqHfwz5yTSk7t7" target="_blank" class="cta-email" style="background:white; color:var(--orange);">
+        📅 Book a Free 15-Min Call
+      </a>
+      <a href="mailto:opswithjane@gmail.com" class="cta-email" style="background:transparent; color:white; border:2px solid rgba(255,255,255,0.5);">
+        opswithjane@gmail.com
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-logo"><span>ops</span>withjane</div>
+      <div class="footer-tagline" style="margin-top:0.4rem;">Clarity, Structure, and Systems That Work. · Est. 2026</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#who">Clients</a></li>
+      <li><a href="https://tinyurl.com/opswithjane" target="_blank">Portfolio</a></li>
+      <li><a href="mailto:opswithjane@gmail.com">Email</a></li>
+      <li><a href="https://linkedin.com/in/wamuyu-kenda" target="_blank">LinkedIn</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+        ring.style.opacity = '0';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.opacity = '0.6';
+      });
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
