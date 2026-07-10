@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ops With Jane — Clarity, Structure, and Systems That Work.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #E95420;
+      --orange-light: #FF6B35;
+      --black: #0A0A0A;
+      --white: #FAFAF8;
+      --cream: #F5F0E8;
+      --gray: #6B6B6B;
+      --light-gray: #E8E4DC;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--orange);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--orange);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      transform: translate(-50%, -50%);
+      opacity: 0.6;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex; gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--orange);
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--orange); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-left {
+      padding: 6rem 3rem 4rem 5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 2rem; height: 1px;
+      background: var(--orange);
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--gray);
+      max-width: 420px;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: white;
+      padding: 0.95rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 2px solid var(--orange);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--black);
+      padding: 0.95rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 2px solid var(--black);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-secondary:hover {
+      background: var(--black);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .hero-right {
+      position: relative;
+      background: var(--black);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-right-inner {
+      position: relative;
+      z-index: 2;
+      padding: 4rem;
+      text-align: center;
+    }
+
+    .hero-logo-display {
+      width: 280px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1s forwards;
+      filter: invert(1);
+    }
+
+    .hero-right-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(233,84,32,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(233,84,32,0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .hero-right-accent {
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border: 2px solid var(--orange);
+      opacity: 0.2;
+      border-radius: 50%;
+    }
+    .hero-right-accent2 {
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 200px; height: 200px;
+      border: 1px solid var(--orange);
+      opacity: 0.15;
+      border-radius: 50%;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+    .stat {
+      border-left: 2px solid var(--orange);
+      padding-left: 1rem;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--gray);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .marquee-wrap {
+      background: var(--orange);
+      padding: 0.9rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: white;
+      padding: 0 2.5rem;
+    }
+    .marquee-dot {
+      color: rgba(255,255,255,0.5);
+    }
+
+    section { position: relative; }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 2rem; height: 1px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+      max-width: 600px;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    /* VIDEO */
+    .section-video {
+      padding: 6rem 5rem;
+      background: var(--black);
+      color: white;
+      text-align: center;
+    }
+    .section-video .section-label { justify-content: center; color: var(--orange); }
+    .section-video .section-label::before { display: none; }
+    .section-video .section-title { color: white; margin-left: auto; margin-right: auto; text-align: center; max-width: 100%; margin-bottom: 1rem; }
+    .video-sub {
+      color: rgba(255,255,255,0.55);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .video-frame {
+      max-width: 720px;
+      margin: 0 auto;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: #111;
+      aspect-ratio: 16/9;
+      position: relative;
+    }
+    .video-frame iframe {
+      width: 100%; height: 100%;
+      border: none;
+      display: block;
+    }
+    .video-frame::before {
+      content: '';
+      position: absolute;
+      top: -8px; left: -8px;
+      width: 40px; height: 40px;
+      border-top: 2px solid var(--orange);
+      border-left: 2px solid var(--orange);
+    }
+    .video-frame::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; right: -8px;
+      width: 40px; height: 40px;
+      border-bottom: 2px solid var(--orange);
+      border-right: 2px solid var(--orange);
+    }
+
+    /* ABOUT */
+    .section-about {
+      padding: 8rem 5rem;
+      background: var(--white);
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-headshot {
+      width: 100%;
+      max-width: 220px;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border: 1px solid var(--light-gray);
+    }
+    .about-headshot img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    .about-body {
+      font-size: 1.08rem;
+      line-height: 1.9;
+      color: var(--gray);
+    }
+    .about-signoff {
+      margin-top: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--black);
+    }
+    .about-side {
+      border-left: 2px solid var(--light-gray);
+      padding-left: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .about-fact-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--orange);
+      line-height: 1;
+    }
+    .about-fact-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.4rem;
+      line-height: 1.5;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--light-gray);
+    }
+
+    .service-card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--light-gray);
+      border-bottom: 1px solid var(--light-gray);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .service-card:nth-child(3n) { border-right: none; }
+    .service-card:nth-last-child(-n+3) { border-bottom: none; }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--orange);
+      transition: width 0.4s ease;
+    }
+    .service-card:hover::before { width: 100%; }
+    .service-card:hover { background: var(--cream); }
+
+    .service-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--orange);
+      letter-spacing: 0.15em;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--gray);
+    }
+
+    .service-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+    .tag {
+      font-size: 0.68rem;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--light-gray);
+      color: var(--gray);
+      text-transform: uppercase;
+    }
+
+    .section-what { padding: 8rem 5rem; background: var(--white); }
+    .section-tools { padding: 8rem 5rem; background: var(--cream); }
+
+    .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 1rem; }
+    .tool-category { background: var(--white); border: 1px solid var(--light-gray); padding: 2rem; transition: transform 0.2s, box-shadow 0.2s; }
+    .tool-category:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .tool-cat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    .tool-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tool-pill {
+      background: var(--cream);
+      border: 1px solid var(--light-gray);
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--black);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .tool-pill:hover { background: var(--orange); border-color: var(--orange); color: white; }
+
+    .section-who { padding: 8rem 5rem; background: var(--black); color: var(--white); }
+    .section-who .section-label { color: var(--orange); }
+    .section-who .section-title { color: var(--white); }
+
+    .clients-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(255,255,255,0.1); margin-top: 1rem; }
+    .client-card { background: var(--black); padding: 3rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .client-card:hover { background: #111; }
+    .client-flag { font-size: 2rem; margin-bottom: 1rem; }
+    .client-market { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+    .client-type { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .client-line { width: 2rem; height: 2px; background: var(--orange); margin-bottom: 1.2rem; }
+
+    .section-why { padding: 8rem 5rem; background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .why-text .section-title { max-width: 100%; }
+    .why-body { font-size: 1rem; line-height: 1.85; color: var(--gray); margin-bottom: 2rem; }
+    .why-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .why-list li { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.92rem; line-height: 1.6; }
+    .why-list li::before { content: '→'; color: var(--orange); font-weight: 700; flex-shrink: 0; margin-top: 0.1rem; }
+    .why-visual { position: relative; }
+    .why-card { background: var(--white); border: 1px solid var(--light-gray); padding: 2rem; margin-bottom: 1rem; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
+    .why-card:hover { transform: translateX(8px); box-shadow: -4px 0 0 var(--orange); }
+    .why-card-title { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--orange); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .why-card-body { font-size: 0.9rem; color: var(--gray); line-height: 1.6; }
+
+    /* EXPERIENCE */
+    .section-experience { padding: 8rem 5rem; background: var(--white); }
+    .experience-grid { display: flex; flex-direction: column; gap: 1px; background: var(--light-gray); border: 1px solid var(--light-gray); }
+    .experience-card {
+      background: var(--white);
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2.5rem;
+      transition: background 0.3s;
+    }
+    .experience-card:hover { background: var(--cream); }
+    .exp-head { display: flex; flex-direction: column; gap: 0.4rem; }
+    .exp-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .exp-role em { color: var(--orange); font-style: italic; }
+    .exp-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .exp-body { font-size: 0.92rem; line-height: 1.75; color: var(--gray); }
+    .exp-body ul { margin-top: 0.8rem; padding-left: 1.2rem; }
+    .exp-body li { margin-bottom: 0.4rem; }
+    .exp-note {
+      font-size: 0.78rem;
+      color: var(--orange);
+      margin-top: 0.8rem;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 900px) {
+      .experience-card { grid-template-columns: 1fr; }
+    }
+
+    /* CASE STUDIES */
+    .section-portfolio { padding: 8rem 5rem; background: var(--cream); }
+    .portfolio-inner-top { max-width: 700px; margin: 0 auto 4rem; text-align: center; }
+    .portfolio-inner-top .section-label { justify-content: center; }
+    .portfolio-inner-top .section-label::before { display: none; }
+    .portfolio-inner-top .section-title { max-width: 100%; text-align: center; margin-left: auto; margin-right: auto; margin-bottom: 1rem; }
+    .portfolio-body { font-size: 1rem; line-height: 1.8; color: var(--gray); }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .case-card {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      padding: 2.2rem;
+      text-decoration: none;
+      color: var(--black);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .case-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+    .case-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.8rem;
+    }
+    .case-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+    .case-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+    .case-link-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .case-link-label::after { content: '↗'; }
+    .case-card:hover .case-link-label { color: var(--orange); }
+
+    @media (max-width: 900px) { .case-grid { grid-template-columns: 1fr; } }
+
+    /* WORK SAMPLES */
+    .section-samples { padding: 8rem 5rem; background: var(--white); }
+    .samples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .sample-card {
+      border: 1px solid var(--light-gray);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: var(--white);
+    }
+    .sample-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+    .sample-img-wrap { width: 100%; aspect-ratio: 16/10; overflow: hidden; background: var(--cream); border-bottom: 1px solid var(--light-gray); }
+    .sample-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .sample-caption { padding: 1.2rem 1.4rem; }
+    .sample-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.4rem;
+    }
+    .sample-title { font-size: 0.92rem; font-weight: 600; }
+
+    /* CODE / GITHUB */
+    .section-code { padding: 8rem 5rem; background: var(--black); color: white; }
+    .section-code .section-label { color: var(--orange); }
+    .section-code .section-title { color: white; }
+    .code-intro { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.8; max-width: 560px; margin-bottom: 3rem; }
+    .code-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(255,255,255,0.1); }
+    .code-card { background: var(--black); padding: 2.2rem; transition: background 0.3s; }
+    .code-card:hover { background: #111; }
+    .code-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.7rem; color: white; }
+    .code-desc { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .code-cta { margin-top: 3rem; text-align: center; }
+    @media (max-width: 900px) { .code-grid { grid-template-columns: 1fr; } }
+
+    .section-cta { padding: 8rem 5rem; background: var(--orange); text-align: center; position: relative; overflow: hidden; }
+    .cta-bg-text {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif; font-size: 18vw; font-weight: 900;
+      color: rgba(255,255,255,0.05); white-space: nowrap; pointer-events: none; letter-spacing: -0.05em;
+    }
+    .cta-label { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+    .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 900; color: white; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; position: relative; z-index: 2; }
+    .cta-sub { font-size: 1rem; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.7; position: relative; z-index: 2; }
+    .cta-contacts { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 2; }
+    .cta-email {
+      display: inline-flex; align-items: center; gap: 0.8rem; background: white; color: var(--orange);
+      padding: 1.1rem 2.2rem; font-family: 'Space Mono', monospace; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.05em; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-email:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+    .cta-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.5); }
+
+    footer { background: var(--black); padding: 3rem 5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; color: white; letter-spacing: 0.05em; }
+    .footer-logo span { color: var(--orange); }
+    .footer-tagline { font-size: 0.78rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--orange); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 7rem 1.5rem 3rem; }
+      .hero-right { display: none; }
+      .section-what, .section-who, .section-why, .section-portfolio, .section-cta, .section-video, .section-about, .section-experience, .section-samples, .section-code, .section-tools {
+        padding: 5rem 1.5rem;
+      }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; }
+      .clients-grid { grid-template-columns: 1fr; }
+      .section-why { grid-template-columns: 1fr; gap: 3rem; }
+      .section-about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-side { border-left: none; border-top: 2px solid var(--light-gray); padding-left: 0; padding-top: 2rem; flex-direction: row; flex-wrap: wrap; }
+      .tools-grid { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo"><span>ops</span>withjane</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#casestudies">Case Studies</a></li>
+      <li><a href="#samples">Work Samples</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-tag">Remote VA · Est. 2026 · Nairobi, Kenya</p>
+      <h1 class="hero-headline">
+        Your ops,<br>
+        finally <em>sorted.</em>
+      </h1>
+      <p class="hero-sub">
+        I'm Jane, a remote Operations VA who builds the systems, handles the admin, and keeps your business running cleanly while you focus on what actually moves the needle.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://calendly.com/opswithjane/30min" target="_blank" class="btn-primary">Book a Free Call</a>
+        <a href="#casestudies" class="btn-secondary">View Case Studies ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Markets Served</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Roles Supported</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Remote Ready</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-right-grid"></div>
+      <div class="hero-right-accent"></div>
+      <div class="hero-right-accent2"></div>
+      <div class="hero-right-inner">
+        <div style="color:white; font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; line-height:1.1;">
+          <span style="color:#E95420;">ops</span><br>with jane.
+        </div>
+        <p style="color:rgba(255,255,255,0.4); font-family:'Space Mono',monospace; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; margin-top:2rem;">Clarity · Structure · Systems</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">CRM Management <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Inbox Zero <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Lead Generation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Appointment Setting <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Process Documentation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Social Media <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Real Estate Admin <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">HubSpot · Airtable · GHL <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">CRM Management <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Inbox Zero <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Lead Generation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Appointment Setting <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Process Documentation <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Social Media <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">Real Estate Admin <span class="marquee-dot">◆</span></span>
+      <span class="marquee-item">HubSpot · Airtable · GHL <span class="marquee-dot">◆</span></span>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <section class="section-video" id="video">
+    <p class="section-label reveal">Meet Jane</p>
+    <h2 class="section-title reveal">A quick hello,<br><em>before the call.</em></h2>
+    <p class="video-sub reveal">A short introduction so you know who you're talking to before we ever hop on a discovery call.</p>
+    <div class="video-frame reveal">
+      <iframe src="https://drive.google.com/file/d/1hhYXOluTQPYUD8JbVC8o_ouq0PptiU73/preview" allow="autoplay" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section-about" id="about">
+    <div>
+      <p class="section-label reveal">About</p>
+      <h2 class="section-title reveal">The problems<br>I actually <em>solve.</em></h2>
+      <p class="about-body reveal">
+        I work with founders and small teams who are stretched too thin to keep every process running the way it should. Most of the people I support are buried under inbox clutter, missed follow ups, and systems that only exist in someone's head instead of on paper. I come in and build the structure that's missing: clean CRMs, documented workflows, calendars that reflect reality, and trackers that show exactly where things stand at a glance. My mathematics background means precision is my default, so numbers, timelines, and reconciliations get checked twice before they ever reach you. I've supported real estate agents juggling listings, healthcare practices untangling years of scheduling chaos, and coaches drowning in outreach they never had time to organize. If your business runs on you remembering everything, that's exactly what I'm here to fix.
+      </p>
+      <p class="about-signoff reveal">Structure isn't glamorous. It's just what lets everything else work.</p>
+    </div>
+    <div class="about-side">
+      <div class="about-headshot reveal">
+        <img src="assets/headshot.jpg" alt="Jane Kenda">
+      </div>
+      <div class="reveal">
+        <div class="about-fact-number">BSc</div>
+        <div class="about-fact-label">Mathematics, University of Nairobi. Precision isn't a buzzword for me, it's training.</div>
+      </div>
+      <div class="reveal">
+        <div class="about-fact-number">5</div>
+        <div class="about-fact-label">Markets supported: US, UK, UAE, Canada, and Australia, across every major time zone.</div>
+      </div>
+      <div class="reveal">
+        <div class="about-fact-number">100%</div>
+        <div class="about-fact-label">Remote-native career. Async communication and clean documentation come naturally, not as an adjustment.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT I DO -->
+  <section class="section-what" id="services">
+    <p class="section-label reveal">What I Do</p>
+    <h2 class="section-title reveal">Everything behind the scenes<br>that <em>keeps you moving.</em></h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-number">01</div>
+        <div class="service-icon">⚙️</div>
+        <h3 class="service-title">Operations & Admin</h3>
+        <p class="service-desc">Inbox management, scheduling, document organization, SOP creation, and the daily operational work that keeps your business from falling apart.</p>
+        <div class="service-tags">
+          <span class="tag">Google Workspace</span>
+          <span class="tag">Notion</span>
+          <span class="tag">Asana</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">02</div>
+        <div class="service-icon">🎯</div>
+        <h3 class="service-title">CRM & Lead Management</h3>
+        <p class="service-desc">Setting up and maintaining your CRM, tracking leads, following up with prospects, and making sure no opportunity slips through the cracks.</p>
+        <div class="service-tags">
+          <span class="tag">HubSpot</span>
+          <span class="tag">GoHighLevel</span>
+          <span class="tag">Airtable</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">03</div>
+        <div class="service-icon">📞</div>
+        <h3 class="service-title">Appointment Setting</h3>
+        <p class="service-desc">Outbound DM and email outreach, lead qualification, and booking qualified appointments directly into your calendar. No closing, just clean handoffs.</p>
+        <div class="service-tags">
+          <span class="tag">Cold Outreach</span>
+          <span class="tag">DM Outreach</span>
+          <span class="tag">Follow-Up</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">04</div>
+        <div class="service-icon">📊</div>
+        <h3 class="service-title">Finance & Billing Support</h3>
+        <p class="service-desc">Invoice tracking, reconciliation support, payment follow-ups, and financial record-keeping, backed by a BSc Mathematics for precision you can trust.</p>
+        <div class="service-tags">
+          <span class="tag">Invoicing</span>
+          <span class="tag">Reconciliation</span>
+          <span class="tag">Excel</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">05</div>
+        <div class="service-icon">📱</div>
+        <h3 class="service-title">Social Media & Content</h3>
+        <p class="service-desc">Branded graphics, Reels and short-form video, content calendars, scheduling, and daily engagement, giving you a consistent presence without the daily effort.</p>
+        <div class="service-tags">
+          <span class="tag">Canva</span>
+          <span class="tag">CapCut</span>
+          <span class="tag">Instagram</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-number">06</div>
+        <div class="service-icon">🏠</div>
+        <h3 class="service-title">Real Estate Admin</h3>
+        <p class="service-desc">Listing coordination, client communication, showing scheduling, transaction documentation, and CRM updates for agents who need everything handled.</p>
+        <div class="service-tags">
+          <span class="tag">Transaction Coord</span>
+          <span class="tag">Client Comms</span>
+          <span class="tag">Records</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section-tools" id="tools">
+    <p class="section-label reveal">My Stack</p>
+    <h2 class="section-title reveal">Tools I work with<br><em>every single day.</em></h2>
+    <div class="tools-grid">
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">CRM & Operations</div>
+        <div class="tool-pills">
+          <span class="tool-pill">HubSpot</span>
+          <span class="tool-pill">GoHighLevel</span>
+          <span class="tool-pill">Airtable</span>
+          <span class="tool-pill">Zoho CRM</span>
+          <span class="tool-pill">Apollo.io</span>
+        </div>
+      </div>
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Project Management</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Notion</span>
+          <span class="tool-pill">ClickUp</span>
+          <span class="tool-pill">Asana</span>
+          <span class="tool-pill">Trello</span>
+          <span class="tool-pill">Monday.com</span>
+        </div>
+      </div>
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Communication</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Slack</span>
+          <span class="tool-pill">Zoom</span>
+          <span class="tool-pill">Google Meet</span>
+          <span class="tool-pill">Microsoft Teams</span>
+          <span class="tool-pill">Loom</span>
+        </div>
+      </div>
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Design & Content</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Canva</span>
+          <span class="tool-pill">CapCut</span>
+          <span class="tool-pill">Later</span>
+          <span class="tool-pill">Metricool</span>
+          <span class="tool-pill">Mailchimp</span>
+        </div>
+      </div>
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Admin & Productivity</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Google Workspace</span>
+          <span class="tool-pill">Microsoft Office</span>
+          <span class="tool-pill">Zapier</span>
+          <span class="tool-pill">ManyChat</span>
+          <span class="tool-pill">Calendly</span>
+        </div>
+      </div>
+      <div class="tool-category reveal">
+        <div class="tool-cat-label">Finance & Data</div>
+        <div class="tool-pills">
+          <span class="tool-pill">Excel (Advanced)</span>
+          <span class="tool-pill">Google Sheets</span>
+          <span class="tool-pill">QuickBooks</span>
+          <span class="tool-pill">Stripe</span>
+          <span class="tool-pill">Xero (Learning)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO I WORK WITH -->
+  <section class="section-who" id="who">
+    <p class="section-label reveal">Who I Work With</p>
+    <h2 class="section-title reveal">Founders and operators<br>across <em>5 markets.</em></h2>
+    <div class="clients-grid">
+      <div class="client-card reveal">
+        <div class="client-flag">🇺🇸</div>
+        <div class="client-line"></div>
+        <div class="client-market">United States</div>
+        <div class="client-type">Real estate agents · Dental practices · Online coaches · SaaS founders · Marketing agencies</div>
+      </div>
+      <div class="client-card reveal">
+        <div class="client-flag">🇦🇪</div>
+        <div class="client-line"></div>
+        <div class="client-market">UAE</div>
+        <div class="client-type">Property developers · Real estate agencies · Mortgage brokers · Business consultancies</div>
+      </div>
+      <div class="client-card reveal">
+        <div class="client-flag">🇬🇧</div>
+        <div class="client-line"></div>
+        <div class="client-market">United Kingdom</div>
+        <div class="client-type">Digital marketing agencies · Accountancy firms · Consultancies · Service-based businesses</div>
+      </div>
+      <div class="client-card reveal">
+        <div class="client-flag">🇨🇦</div>
+        <div class="client-line"></div>
+        <div class="client-market">Canada</div>
+        <div class="client-type">Mortgage brokers · Insurance agencies · Small law firms · E-commerce brands</div>
+      </div>
+      <div class="client-card reveal" style="border-bottom:none;">
+        <div class="client-flag">🇦🇺</div>
+        <div class="client-line"></div>
+        <div class="client-market">Australia</div>
+        <div class="client-type">Trades businesses · Real estate agencies · Allied health clinics · Coaching businesses</div>
+      </div>
+      <div class="client-card reveal" style="border-bottom:none; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;">
+          <p style="font-family:'Playfair Display',serif; font-size:1.8rem; color:white; font-weight:900; font-style:italic; margin-bottom:0.5rem;">"Your timezone.<br>My problem to solve."</p>
+          <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase;">— Jane Kenda</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY ME -->
+  <section class="section-why" id="why">
+    <div class="why-text">
+      <p class="section-label reveal">Why Me</p>
+      <h2 class="section-title reveal">Not just a VA.<br>A <em>systems thinker.</em></h2>
+      <p class="why-body reveal">
+        I graduated with a BSc Mathematics from the University of Nairobi in 2025. Before I was a VA, I was trained to find structure in complexity, and that's exactly what I bring to every client engagement.
+      </p>
+      <p class="why-body reveal">
+        I don't just complete tasks. I build the workflows, trackers, and processes that mean you stop thinking about the admin entirely.
+      </p>
+      <ul class="why-list reveal">
+        <li>HubSpot CRM Certified</li>
+        <li>Trained in EVA (Executive Virtual Assistance) at Salas Staffing</li>
+        <li>ALX Virtual Assistant Program, Completed ✓</li>
+        <li>ALX AI Career Essentials, Completed ✓</li>
+        <li>Teki Certified Brand Creator</li>
+        <li>Experienced across real estate, marketing, finance, and clinical admin</li>
+        <li>Available across US, UK, UAE, Canadian & Australian time zones</li>
+      </ul>
+    </div>
+    <div class="why-visual">
+      <div class="why-card reveal">
+        <div class="why-card-title">The Math Advantage</div>
+        <div class="why-card-body">A BSc Mathematics isn't just a degree. It's a precision mindset applied to every spreadsheet, every reconciliation, and every system built.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-title">Process-First Thinking</div>
+        <div class="why-card-body">I document everything. Every workflow I build becomes a system your business owns, not knowledge locked in my head.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-title">Reliability Over Flash</div>
+        <div class="why-card-body">I show up, I communicate proactively, and I deliver on time. The best VA is the one you stop thinking about, because everything just gets done.</div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-card-title">Remote Since Day One</div>
+        <div class="why-card-body">I've built my entire career in distributed, async environments. Remote work isn't an adjustment for me, it's my natural habitat.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK EXPERIENCE -->
+  <section class="section-experience" id="experience">
+    <p class="section-label reveal">Work Experience</p>
+    <h2 class="section-title reveal">Real projects.<br><em>Real scope.</em></h2>
+    <div class="experience-grid">
+
+      <div class="experience-card reveal">
+        <div class="exp-head">
+          <div class="exp-role">NeuroConnect Africa</div>
+          <div class="exp-meta">Personal Assistant to the Founder</div>
+          <div class="exp-meta">Oct 2025 – Jun 2026</div>
+        </div>
+        <div class="exp-body">
+          Provided direct executive support to the founder of a growing health-tech organization, managing the day to day so leadership could focus on strategy.
+          <ul>
+            <li>Owned the founder's calendar, inbox, and daily priorities end to end</li>
+            <li>Coordinated meetings, travel, and follow ups across multiple stakeholders</li>
+            <li>Built and maintained internal documentation and reporting processes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="experience-card reveal">
+        <div class="exp-head">
+          <div class="exp-role">Emily</div>
+          <div class="exp-meta">Project Management · Gantt Chart & Timeline Planning</div>
+          <div class="exp-meta">Freelance Engagement</div>
+        </div>
+        <div class="exp-body">
+          Built an end-to-end project timeline system in Excel to bring visibility to a multi-phase rollout, including task ownership, dependencies, and status tracking.
+          <ul>
+            <li>Designed a full Gantt chart with color-coded status and milestone tracking</li>
+            <li>Structured tasks by owner, phase, and deadline for clear accountability</li>
+            <li>Delivered a reusable template the client could update independently</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="experience-card reveal">
+        <div class="exp-head">
+          <div class="exp-role">Elena</div>
+          <div class="exp-meta">Lead Generation</div>
+          <div class="exp-meta">Freelance Engagement</div>
+        </div>
+        <div class="exp-body">
+          Ran outbound lead generation to help fill a consistent pipeline, from list building through to first outreach and response tracking.
+          <ul>
+            <li>Sourced and qualified prospects aligned to the ideal client profile</li>
+            <li>Managed outreach sequencing and follow up cadence</li>
+            <li>Tracked responses and handed off warm leads for closing</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="experience-card reveal">
+        <div class="exp-head">
+          <div class="exp-role">Alex</div>
+          <div class="exp-meta">Data Entry & Research Support</div>
+          <div class="exp-meta">Freelance Engagement</div>
+        </div>
+        <div class="exp-body">
+          Handled structured data entry and research compilation, organizing raw information into clean, usable spreadsheets with supporting visuals.
+          <ul>
+            <li>Compiled and cross-checked data from multiple sources for accuracy</li>
+            <li>Built summary charts to make the data easy to interpret at a glance</li>
+            <li>Delivered clean, well-labeled spreadsheets ready for immediate use</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CASE STUDIES -->
+  <section class="section-portfolio" id="casestudies">
+    <div class="portfolio-inner-top">
+      <p class="section-label reveal">Case Studies</p>
+      <h2 class="section-title reveal">A Day in the Life.<br><em>See the actual work.</em></h2>
+      <p class="portfolio-body reveal">
+        Four deep-dive case studies walking through real scenarios, the problems, the tools, and the systems built to solve them. Each one links out to the full breakdown on Notion.
+      </p>
+    </div>
+    <div class="case-grid">
+      <a href="https://app.notion.com/p/A-Day-in-the-Life-Executive-Support-Case-Study-38184b6eeb518015b6bbfe41e352a89f?source=copy_link" target="_blank" class="case-card reveal">
+        <div class="case-eyebrow">A Day in the Life</div>
+        <div class="case-title">Executive Support</div>
+        <p class="case-desc">A behind-the-scenes look at running a founder's calendar, inbox, and priorities so nothing gets missed.</p>
+        <div class="case-link-label">Read on Notion</div>
+      </a>
+      <a href="https://app.notion.com/p/A-Day-in-the-Life-1-Lead-Gen-LinkedIn-Outreach-System-for-Coaches-2a497b40e80d80eb89f2d0d4fca21c3e?source=copy_link" target="_blank" class="case-card reveal">
+        <div class="case-eyebrow">A Day in the Life</div>
+        <div class="case-title">Lead Gen: LinkedIn Outreach System for Coaches</div>
+        <p class="case-desc">Building a repeatable outreach system using Airtable, Zapier, and Apollo.io to keep a coaching pipeline full.</p>
+        <div class="case-link-label">Read on Notion</div>
+      </a>
+      <a href="https://app.notion.com/p/A-Day-in-The-Life-2-Healthcare-Therapist-Practice-Ops-Cleanup-39697b40e80d80a29cbed18ce7089acd?source=copy_link" target="_blank" class="case-card reveal">
+        <div class="case-eyebrow">A Day in the Life</div>
+        <div class="case-title">Healthcare Practice Ops Cleanup</div>
+        <p class="case-desc">Untangling scheduling chaos for a therapy practice using SimplePractice, TherapyNotes, and Google Apps Script.</p>
+        <div class="case-link-label">Read on Notion</div>
+      </a>
+      <a href="https://app.notion.com/p/A-Day-in-The-Life-2-Healthcare-Therapist-Practice-Ops-Cleanup-39697b40e80d80a29cbed18ce7089acd?source=copy_link" target="_blank" class="case-card reveal">
+        <div class="case-eyebrow">A Day in the Life</div>
+        <div class="case-title">Business Client Onboarding System</div>
+        <p class="case-desc">Designing a smooth onboarding flow across GoHighLevel, Dubsado, and HubSpot for a fast-growing service business.</p>
+        <div class="case-link-label">Read on Notion</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- WORK SAMPLES -->
+  <section class="section-samples" id="samples">
+    <p class="section-label reveal">Work Samples</p>
+    <h2 class="section-title reveal">What day to day<br><em>actually looks like.</em></h2>
+    <div class="samples-grid">
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/calendar_management.png" alt="Calendar management example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Scheduling</div>
+          <div class="sample-title">Calendar & Time Block Management</div>
+        </div>
+      </div>
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/data_entry.png" alt="Data entry and research example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Data</div>
+          <div class="sample-title">Data Research & Compilation</div>
+        </div>
+      </div>
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/email_management.png" alt="Email inbox management example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Admin</div>
+          <div class="sample-title">Inbox Organization & Triage</div>
+        </div>
+      </div>
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/excel_tracking.png" alt="Excel project tracking example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Project Management</div>
+          <div class="sample-title">Project & Task Tracking</div>
+        </div>
+      </div>
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/gantt_chart.png" alt="Gantt chart timeline example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Project Management</div>
+          <div class="sample-title">Gantt Chart & Timeline Planning</div>
+        </div>
+      </div>
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/onboarding_form.png" alt="Client onboarding form example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Client Systems</div>
+          <div class="sample-title">Client Onboarding Form Design</div>
+        </div>
+      </div>
+      <div class="sample-card reveal">
+        <div class="sample-img-wrap"><img src="assets/trello_dashboard.png" alt="Trello board example"></div>
+        <div class="sample-caption">
+          <div class="sample-label">Project Management</div>
+          <div class="sample-title">Trello Workflow Board Setup</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE / GITHUB -->
+  <section class="section-code" id="code">
+    <p class="section-label reveal">Beyond Ops</p>
+    <h2 class="section-title reveal">A little bit of<br><em>data and automation.</em></h2>
+    <p class="code-intro reveal">Alongside operations work, I build small data and automation projects on the side. Not the main event, but it shapes how I think about systems.</p>
+    <div class="code-grid">
+      <div class="code-card reveal">
+        <div class="code-title">Telecom Churn Prediction Model</div>
+        <div class="code-desc">A model built to flag customers likely to churn, using historical account and usage data.</div>
+      </div>
+      <div class="code-card reveal">
+        <div class="code-title">HealthStat Hospital Efficiency Dashboard</div>
+        <div class="code-desc">A dashboard surfacing hospital operations metrics to support faster, clearer decision making.</div>
+      </div>
+      <div class="code-card reveal">
+        <div class="code-title">Ecommerce Sales Dashboard</div>
+        <div class="code-desc">A sales performance dashboard built to track revenue trends and product performance over time.</div>
+      </div>
+      <div class="code-card reveal">
+        <div class="code-title">Automated Job Scraper</div>
+        <div class="code-desc">A Python pipeline that scrapes and filters relevant job listings, deployed on a schedule with GitHub Actions.</div>
+      </div>
+    </div>
+    <div class="code-cta reveal">
+      <a href="https://github.com/Muyu3" target="_blank" class="btn-primary">View GitHub ↗</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-cta" id="contact">
+    <div class="cta-bg-text">ops</div>
+    <p class="cta-label">Ready to get started?</p>
+    <h2 class="cta-title">Let's build something<br>that actually works.</h2>
+    <p class="cta-sub">Whether you need 5 hours a month or full-time ops support, let's have a 15-minute call and figure out if we're a fit.</p>
+    <div class="cta-contacts">
+      <a href="https://calendly.com/opswithjane/30min" target="_blank" class="cta-email">📅 Book a Free 15-Min Call</a>
+      <a href="mailto:opswithjane@gmail.com" class="cta-email cta-outline">opswithjane@gmail.com</a>
+      <a href="tel:+254112396546" class="cta-email cta-outline">+254 112 396 546</a>
+      <a href="https://www.linkedin.com/in/wamuyu-kenda" target="_blank" class="cta-email cta-outline">LinkedIn</a>
+      <a href="https://www.facebook.com/keith.jennifer.90" target="_blank" class="cta-email cta-outline">Facebook</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-logo"><span>ops</span>withjane</div>
+      <div class="footer-tagline" style="margin-top:0.4rem;">Clarity, Structure, and Systems That Work. · Est. 2026</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#casestudies">Case Studies</a></li>
+      <li><a href="mailto:opswithjane@gmail.com">Email</a></li>
+      <li><a href="https://www.linkedin.com/in/wamuyu-kenda" target="_blank">LinkedIn</a></li>
+      <li><a href="https://www.facebook.com/keith.jennifer.90" target="_blank">Facebook</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+        ring.style.opacity = '0';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+        ring.style.opacity = '0.6';
+      });
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
