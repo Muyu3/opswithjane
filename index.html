@@ -157,7 +157,7 @@
       font-weight: 300;
       line-height: 1.75;
       color: var(--gray);
-      max-width: 420px;
+      max-width: 440px;
       margin-bottom: 3rem;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.6s forwards;
@@ -443,84 +443,119 @@
       line-height: 1.5;
     }
 
-    .services-grid {
+    /* VALUE STRIP */
+    .section-value {
+      padding: 5rem 5rem;
+      background: var(--black);
+      color: white;
+      text-align: center;
+    }
+    .value-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 900;
+      margin-bottom: 3rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .value-title em { color: var(--orange); font-style: italic; }
+    .value-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border: 1px solid var(--light-gray);
+      gap: 1px;
+      background: rgba(255,255,255,0.1);
+      max-width: 900px;
+      margin: 0 auto;
     }
-
-    .service-card {
-      padding: 2.5rem;
-      border-right: 1px solid var(--light-gray);
-      border-bottom: 1px solid var(--light-gray);
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    .service-card:nth-child(3n) { border-right: none; }
-    .service-card:nth-last-child(-n+3) { border-bottom: none; }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 0; height: 2px;
-      background: var(--orange);
-      transition: width 0.4s ease;
-    }
-    .service-card:hover::before { width: 100%; }
-    .service-card:hover { background: var(--cream); }
-
-    .service-number {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--orange);
-      letter-spacing: 0.15em;
-      margin-bottom: 1.2rem;
-    }
-
-    .service-icon { font-size: 1.8rem; margin-bottom: 1rem; }
-
-    .service-title {
+    .value-card { background: var(--black); padding: 2.5rem 1.5rem; }
+    .value-hours {
       font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.8rem;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 0.6rem;
     }
+    .value-desc { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    @media (max-width: 900px) { .value-grid { grid-template-columns: 1fr; } }
 
-    .service-desc {
-      font-size: 0.88rem;
-      line-height: 1.7;
-      color: var(--gray);
+    /* PACKAGES */
+    .section-packages { padding: 8rem 5rem; background: var(--white); }
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
     }
-
-    .service-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
-    .tag {
-      font-size: 0.68rem;
-      font-family: 'Space Mono', monospace;
-      letter-spacing: 0.08em;
-      padding: 0.25rem 0.6rem;
+    .package-card {
+      background: var(--white);
       border: 1px solid var(--light-gray);
-      color: var(--gray);
-      text-transform: uppercase;
+      padding: 2.2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative;
     }
-
-    .service-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-top: 1.2rem;
+    .package-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--orange); }
+    .package-card.featured { border-color: var(--orange); border-width: 2px; }
+    .package-badge {
+      position: absolute; top: -1px; right: -1px;
+      background: var(--orange); color: white;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+    }
+    .package-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .package-hours {
       font-family: 'Space Mono', monospace;
       font-size: 0.72rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--orange);
-      text-decoration: none;
+      margin-bottom: 1.2rem;
     }
-    .service-link:hover { text-decoration: underline; }
+    .package-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.2rem;
+    }
+    .package-price span { font-size: 0.9rem; font-weight: 500; color: var(--gray); font-family: 'DM Sans', sans-serif; }
+    .package-for { font-size: 0.85rem; color: var(--gray); line-height: 1.6; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--light-gray); }
+    .package-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; flex-grow: 1; }
+    .package-list li { font-size: 0.85rem; line-height: 1.5; padding-left: 1.2rem; position: relative; color: var(--black); }
+    .package-list li::before { content: '✓'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+    .package-cta {
+      text-align: center;
+      background: var(--black);
+      color: white;
+      padding: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .package-cta:hover { background: var(--orange); }
+    .package-card.featured .package-cta { background: var(--orange); }
+    .package-card.featured .package-cta:hover { background: var(--black); }
 
-    .section-what { padding: 8rem 5rem; background: var(--white); }
+    .packages-note {
+      margin-top: 2.5rem;
+      font-size: 0.85rem;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) { .packages-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .packages-grid { grid-template-columns: 1fr; } }
+
     .section-tools { padding: 8rem 5rem; background: var(--cream); }
 
     .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 1rem; }
@@ -748,11 +783,9 @@
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-left { padding: 7rem 1.5rem 3rem; }
       .hero-right { display: none; }
-      .section-what, .section-who, .section-why, .section-portfolio, .section-cta, .section-video, .section-about, .section-experience, .section-samples, .section-code, .section-tools {
+      .section-what, .section-who, .section-why, .section-portfolio, .section-cta, .section-video, .section-about, .section-experience, .section-samples, .section-code, .section-tools, .section-packages, .section-value {
         padding: 5rem 1.5rem;
       }
-      .services-grid { grid-template-columns: 1fr; }
-      .service-card { border-right: none; }
       .clients-grid { grid-template-columns: 1fr; }
       .section-why { grid-template-columns: 1fr; gap: 3rem; }
       .section-about { grid-template-columns: 1fr; gap: 3rem; }
@@ -772,7 +805,7 @@
     <a href="#" class="nav-logo"><span>ops</span>withjane</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
+      <li><a href="#packages">Packages</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#casestudies">Case Studies</a></li>
       <li><a href="#samples">Work Samples</a></li>
@@ -783,17 +816,17 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-left">
-      <p class="hero-tag">Remote VA · Est. 2026 · Nairobi, Kenya</p>
+      <p class="hero-tag">Fractional Ops Partner · Est. 2026 · Nairobi, Kenya</p>
       <h1 class="hero-headline">
-        Your ops,<br>
-        finally <em>sorted.</em>
+        Run your business.<br>
+        I'll handle the <em>ops.</em>
       </h1>
       <p class="hero-sub">
-        I'm Jane, a remote Operations VA who builds the systems, handles the admin, and keeps your business running cleanly while you focus on what actually moves the needle.
+        I'm Jane, founder of OpsWithJane — a fractional operations partner for solo founders, consultants, and small teams who want their business running like clockwork, without the overhead of a full-time hire.
       </p>
       <div class="hero-ctas">
         <a href="https://calendly.com/opswithjane/30min" target="_blank" class="btn-primary">Book a Free Call</a>
-        <a href="#casestudies" class="btn-secondary">View Case Studies ↓</a>
+        <a href="#packages" class="btn-secondary">View Packages ↓</a>
       </div>
       <div class="hero-stats">
         <div class="stat">
@@ -801,12 +834,12 @@
           <div class="stat-label">Markets Served</div>
         </div>
         <div class="stat">
-          <div class="stat-number">20+</div>
-          <div class="stat-label">Roles Supported</div>
+          <div class="stat-number">80hrs</div>
+          <div class="stat-label">Monthly Capacity</div>
         </div>
         <div class="stat">
           <div class="stat-number">100%</div>
-          <div class="stat-label">Remote Ready</div>
+          <div class="stat-label">Remote Partner</div>
         </div>
       </div>
     </div>
@@ -849,9 +882,9 @@
 
   <!-- VIDEO -->
   <section class="section-video" id="video">
-    <p class="section-label reveal">Meet Jane</p>
-    <h2 class="section-title reveal">A quick hello,<br><em>before the call.</em></h2>
-    <p class="video-sub reveal">A short introduction so you know who you're talking to before we ever hop on a discovery call.</p>
+    <p class="section-label reveal">Meet Your Ops Partner</p>
+    <h2 class="section-title reveal">A quick hello,<br><em>before we talk business.</em></h2>
+    <p class="video-sub reveal">A short introduction so you know exactly who's behind the systems before we ever hop on a call.</p>
     <div class="video-frame reveal">
       <!-- PASTE YOUR LOOM EMBED LINK HERE (replace the src below) -->
       <iframe src="PASTE_LOOM_EMBED_LINK_HERE" allow="autoplay" allowfullscreen></iframe>
@@ -861,12 +894,12 @@
   <!-- ABOUT -->
   <section class="section-about" id="about">
     <div>
-      <p class="section-label reveal">About</p>
-      <h2 class="section-title reveal">The problems<br>I actually <em>solve.</em></h2>
+      <p class="section-label reveal">About OpsWithJane</p>
+      <h2 class="section-title reveal">Not a hire.<br>A <em>partner.</em></h2>
       <p class="about-body reveal">
-        I work with founders and small teams who are stretched too thin to keep every process running the way it should. Most of the people I support are buried under inbox clutter, missed follow ups, and systems that only exist in someone's head instead of on paper. I come in and build the structure that's missing: clean CRMs, documented workflows, calendars that reflect reality, and trackers that show exactly where things stand at a glance. My mathematics background means precision is my default, so numbers, timelines, and reconciliations get checked twice before they ever reach you. I've supported real estate agents juggling listings, healthcare practices untangling years of scheduling chaos, and coaches drowning in outreach they never had time to organize. If your business runs on you remembering everything, that's exactly what I'm here to fix.
+        OpsWithJane exists because founders and small teams don't need another task-doer, they need someone who owns outcomes. I run the operations side of your business, clean CRMs, documented workflows, calendars that reflect reality, and trackers that show exactly where things stand, so you're never the bottleneck holding your own business back. My mathematics background means precision is my default: numbers, timelines, and reconciliations get checked twice before they ever reach you. I partner with real estate agents juggling listings, healthcare practices untangling scheduling chaos, and coaches drowning in outreach they never had time to organize. If your business runs on you remembering everything, I'm the partner who takes that weight off.
       </p>
-      <p class="about-signoff reveal">Structure isn't glamorous. It's just what lets everything else work.</p>
+      <p class="about-signoff reveal">Structure isn't glamorous. It's just what lets your business grow without you.</p>
     </div>
     <div class="about-side">
       <div class="about-headshot reveal">
@@ -887,90 +920,91 @@
     </div>
   </section>
 
-  <!-- WHAT I DO -->
-  <section class="section-what" id="services">
-    <p class="section-label reveal">What I Do</p>
-    <h2 class="section-title reveal">Everything behind the scenes<br>that <em>keeps you moving.</em></h2>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-number">01</div>
-        <div class="service-icon">⚙️</div>
-        <h3 class="service-title">Operations & Admin</h3>
-        <p class="service-desc">Inbox management, scheduling, document organization, SOP creation, and the daily operational work that keeps your business from falling apart.</p>
-        <div class="service-tags">
-          <span class="tag">Google Workspace</span>
-          <span class="tag">Notion</span>
-          <span class="tag">Asana</span>
-        </div>
+  <!-- VALUE STRIP -->
+  <section class="section-value">
+    <p class="value-title reveal">What would you do with the time back? <em>Grow the business. Or step away from the desk.</em></p>
+    <div class="value-grid">
+      <div class="value-card reveal">
+        <div class="value-hours">10 hrs</div>
+        <div class="value-desc">Back in your week — enough to close a new client, ship the offer you've been sitting on, or just leave the laptop at 5pm.</div>
       </div>
-      <div class="service-card reveal">
-        <div class="service-number">02</div>
-        <div class="service-icon">🎯</div>
-        <h3 class="service-title">CRM & Lead Management</h3>
-        <p class="service-desc">Setting up and maintaining your CRM, tracking leads, following up with prospects, and making sure no opportunity slips through the cracks.</p>
-        <div class="service-tags">
-          <span class="tag">HubSpot</span>
-          <span class="tag">GoHighLevel</span>
-          <span class="tag">Airtable</span>
-        </div>
+      <div class="value-card reveal">
+        <div class="value-hours">20 hrs</div>
+        <div class="value-desc">Back in your month — space to plan your next quarter instead of firefighting admin every day.</div>
       </div>
-      <div class="service-card reveal">
-        <div class="service-number">03</div>
-        <div class="service-icon">📞</div>
-        <h3 class="service-title">Appointment Setting</h3>
-        <p class="service-desc">Outbound DM and email outreach, lead qualification, and booking qualified appointments directly into your calendar. No closing, just clean handoffs.</p>
-        <div class="service-tags">
-          <span class="tag">Cold Outreach</span>
-          <span class="tag">DM Outreach</span>
-          <span class="tag">Follow-Up</span>
-        </div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-number">04</div>
-        <div class="service-icon">📊</div>
-        <h3 class="service-title">Finance & Billing Support</h3>
-        <p class="service-desc">Invoice tracking, reconciliation support, payment follow-ups, and financial record-keeping, backed by a BSc Mathematics for precision you can trust.</p>
-        <div class="service-tags">
-          <span class="tag">Invoicing</span>
-          <span class="tag">Reconciliation</span>
-          <span class="tag">Excel</span>
-        </div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-number">05</div>
-        <div class="service-icon">📱</div>
-        <h3 class="service-title">Social Media & Content</h3>
-        <p class="service-desc">Branded graphics, Reels and short-form video, content calendars, scheduling, and daily engagement, giving you a consistent presence without the daily effort.</p>
-        <div class="service-tags">
-          <span class="tag">Canva</span>
-          <span class="tag">CapCut</span>
-          <span class="tag">Instagram</span>
-        </div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-number">06</div>
-        <div class="service-icon">🏠</div>
-        <h3 class="service-title">Real Estate Admin</h3>
-        <p class="service-desc">Listing coordination, client communication, showing scheduling, transaction documentation, and CRM updates for agents who need everything handled.</p>
-        <div class="service-tags">
-          <span class="tag">Transaction Coord</span>
-          <span class="tag">Client Comms</span>
-          <span class="tag">Records</span>
-        </div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-number">07</div>
-        <div class="service-icon">🎬</div>
-        <h3 class="service-title">Video Editing</h3>
-        <p class="service-desc">Clean, watchable edits for short-form and long-form content, turnaround for talking-head videos, tutorials, and social clips.</p>
-        <div class="service-tags">
-          <span class="tag">$20 / 30–60s clip</span>
-          <span class="tag">$120 / 8–10min video</span>
-        </div>
-        <!-- PASTE YOUR GOOGLE DRIVE VIDEO PORTFOLIO LINK HERE (replace href below) -->
-        <a href="PASTE_GOOGLE_DRIVE_VIDEO_PORTFOLIO_LINK_HERE" target="_blank" class="service-link">View Video Portfolio ↗</a>
+      <div class="value-card reveal">
+        <div class="value-hours">40 hrs</div>
+        <div class="value-desc">Back in your month — a full extra work-week you get to spend on strategy, growth, or your family.</div>
       </div>
     </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section class="section-packages" id="packages">
+    <p class="section-label reveal">Partnership Packages</p>
+    <h2 class="section-title reveal">Pick the partnership<br>that <em>fits where you're at.</em></h2>
+    <div class="packages-grid">
+
+      <div class="package-card reveal">
+        <div class="package-name">Starter Partner</div>
+        <div class="package-hours">10 hrs / week</div>
+        <div class="package-price">$150<span>/week</span></div>
+        <p class="package-for">For solo founders who need consistent, dependable support every single week.</p>
+        <ul class="package-list">
+          <li>Inbox & calendar management</li>
+          <li>CRM upkeep & lead follow-up</li>
+          <li>Weekly progress summary</li>
+          <li>Direct async communication</li>
+        </ul>
+        <a href="#contact" class="package-cta">Start This Partnership</a>
+      </div>
+
+      <div class="package-card reveal">
+        <div class="package-name">Growth Partner</div>
+        <div class="package-hours">20 hrs / month</div>
+        <div class="package-price">$300<span>/month</span></div>
+        <p class="package-for">For early-stage solopreneurs who need reliable part-time ops without the full-time cost.</p>
+        <ul class="package-list">
+          <li>Everything in Starter Partner</li>
+          <li>Workflow automation (Zapier, Airtable, ManyChat)</li>
+          <li>Bookkeeping & invoicing support</li>
+          <li>SOP documentation</li>
+        </ul>
+        <a href="#contact" class="package-cta">Start This Partnership</a>
+      </div>
+
+      <div class="package-card featured reveal">
+        <div class="package-badge">Most Requested</div>
+        <div class="package-name">Full Partner</div>
+        <div class="package-hours">80 hrs / month</div>
+        <div class="package-price">$1,200<span>/month</span></div>
+        <p class="package-for">For small teams and consulting firms that need a right-hand operator running the business day to day.</p>
+        <ul class="package-list">
+          <li>Everything in Growth Partner</li>
+          <li>Dashboard & reporting builds</li>
+          <li>Lead gen & BD outreach support</li>
+          <li>Video editing (CapCut / Premiere Pro)</li>
+          <li>Priority same-day turnaround</li>
+        </ul>
+        <a href="#contact" class="package-cta">Start This Partnership</a>
+      </div>
+
+      <div class="package-card reveal">
+        <div class="package-name">Custom Partnership</div>
+        <div class="package-hours">Tailored scope</div>
+        <div class="package-price">Custom<span> quote</span></div>
+        <p class="package-for">For unique needs, project-based work, or scaling your support beyond 80 hours a month.</p>
+        <ul class="package-list">
+          <li>Scoped to your exact business</li>
+          <li>Mix and match any service above</li>
+          <li>Project-based or ongoing retainer</li>
+          <li>Built around your growth stage</li>
+        </ul>
+        <a href="#contact" class="package-cta">Let's Talk Scope</a>
+      </div>
+
+    </div>
+    <p class="packages-note reveal">All packages billed at a transparent $15/hr equivalent. Every partnership starts with a 15-minute call to make sure it's the right fit, no long-term lock-in required.</p>
   </section>
 
   <!-- TOOLS -->
@@ -1013,6 +1047,7 @@
         <div class="tool-pills">
           <span class="tool-pill">Canva</span>
           <span class="tool-pill">CapCut</span>
+          <span class="tool-pill">Adobe Premiere Pro</span>
           <span class="tool-pill">Later</span>
           <span class="tool-pill">Metricool</span>
           <span class="tool-pill">Mailchimp</span>
@@ -1043,7 +1078,7 @@
 
   <!-- WHO I WORK WITH -->
   <section class="section-who" id="who">
-    <p class="section-label reveal">Who I Work With</p>
+    <p class="section-label reveal">Who I Partner With</p>
     <h2 class="section-title reveal">Founders and operators<br>across <em>5 markets.</em></h2>
     <div class="clients-grid">
       <div class="client-card reveal">
@@ -1088,10 +1123,10 @@
   <!-- WHY ME -->
   <section class="section-why" id="why">
     <div class="why-text">
-      <p class="section-label reveal">Why Me</p>
-      <h2 class="section-title reveal">Not just a VA.<br>A <em>systems thinker.</em></h2>
+      <p class="section-label reveal">Why Partner With Me</p>
+      <h2 class="section-title reveal">Not just support.<br>A <em>systems thinker.</em></h2>
       <p class="why-body reveal">
-        I graduated with a BSc Mathematics from the University of Nairobi in 2025. Before I was a VA, I was trained to find structure in complexity, and that's exactly what I bring to every client engagement.
+        I graduated with a BSc Mathematics from the University of Nairobi in 2025. Before I was running OpsWithJane, I was trained to find structure in complexity, and that's exactly what I bring to every partnership.
       </p>
       <p class="why-body reveal">
         I don't just complete tasks. I build the workflows, trackers, and processes that mean you stop thinking about the admin entirely.
@@ -1118,18 +1153,18 @@
       </div>
       <div class="why-card reveal">
         <div class="why-card-title">Reliability Over Flash</div>
-        <div class="why-card-body">I show up, I communicate proactively, and I deliver on time. The best VA is the one you stop thinking about, because everything just gets done.</div>
+        <div class="why-card-body">I show up, I communicate proactively, and I deliver on time. The best partner is the one you stop thinking about, because everything just gets done.</div>
       </div>
       <div class="why-card reveal">
         <div class="why-card-title">Remote Since Day One</div>
-        <div class="why-card-body">I've built my entire career in distributed, async environments. Remote work isn't an adjustment for me, it's my natural habitat.</div>
+        <div class="why-card-body">I've built my entire practice in distributed, async environments. Remote partnership isn't an adjustment for me, it's my natural habitat.</div>
       </div>
     </div>
   </section>
 
   <!-- WORK EXPERIENCE -->
   <section class="section-experience" id="experience">
-    <p class="section-label reveal">Work Experience</p>
+    <p class="section-label reveal">Track Record</p>
     <h2 class="section-title reveal">Real projects.<br><em>Real scope.</em></h2>
     <div class="experience-grid">
 
@@ -1146,6 +1181,7 @@
             <li>Coordinated meetings, travel, and follow ups across multiple stakeholders</li>
             <li>Built and maintained internal documentation and reporting processes</li>
           </ul>
+          <div class="exp-note">Past engagement — now running OpsWithJane full-time</div>
         </div>
       </div>
 
@@ -1153,7 +1189,7 @@
         <div class="exp-head">
           <div class="exp-role">Emily</div>
           <div class="exp-meta">Project Management · Gantt Chart & Timeline Planning</div>
-          <div class="exp-meta">Freelance Engagement</div>
+          <div class="exp-meta">Client Engagement</div>
         </div>
         <div class="exp-body">
           Built an end-to-end project timeline system in Excel to bring visibility to a multi-phase rollout, including task ownership, dependencies, and status tracking.
@@ -1169,7 +1205,7 @@
         <div class="exp-head">
           <div class="exp-role">Elena</div>
           <div class="exp-meta">Lead Generation</div>
-          <div class="exp-meta">Freelance Engagement</div>
+          <div class="exp-meta">Client Engagement</div>
         </div>
         <div class="exp-body">
           Ran outbound lead generation to help fill a consistent pipeline, from list building through to first outreach and response tracking.
@@ -1185,7 +1221,7 @@
         <div class="exp-head">
           <div class="exp-role">Alex</div>
           <div class="exp-meta">Data Entry & Research Support</div>
-          <div class="exp-meta">Freelance Engagement</div>
+          <div class="exp-meta">Client Engagement</div>
         </div>
         <div class="exp-body">
           Handled structured data entry and research compilation, organizing raw information into clean, usable spreadsheets with supporting visuals.
@@ -1325,9 +1361,9 @@
   <!-- CTA -->
   <section class="section-cta" id="contact">
     <div class="cta-bg-text">ops</div>
-    <p class="cta-label">Ready to get started?</p>
+    <p class="cta-label">Ready to reclaim your time?</p>
     <h2 class="cta-title">Let's build something<br>that actually works.</h2>
-    <p class="cta-sub">Whether you need 5 hours a month or full-time ops support, let's have a 15-minute call and figure out if we're a fit.</p>
+    <p class="cta-sub">Whether you need 10 hours a week or a full 80-hour monthly partnership, let's have a 15-minute call and figure out if we're a fit.</p>
     <div class="cta-contacts">
       <a href="https://calendly.com/opswithjane/30min" target="_blank" class="cta-email">📅 Book a Free 15-Min Call</a>
       <a href="mailto:opswithjane@gmail.com" class="cta-email cta-outline">opswithjane@gmail.com</a>
@@ -1344,7 +1380,7 @@
       <div class="footer-tagline" style="margin-top:0.4rem;">Clarity, Structure, and Systems That Work. · Est. 2026</div>
     </div>
     <ul class="footer-links">
-      <li><a href="#services">Services</a></li>
+      <li><a href="#packages">Packages</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#casestudies">Case Studies</a></li>
       <li><a href="mailto:opswithjane@gmail.com">Email</a></li>
