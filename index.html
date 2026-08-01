@@ -100,16 +100,18 @@
     .nav-links a:hover::after { width: 100%; }
 
     .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
       padding-top: 5rem;
       overflow: hidden;
       position: relative;
+      background: var(--white);
     }
 
     .hero-left {
-      padding: 6rem 3rem 4rem 5rem;
+      padding: 6rem 3rem 5rem 5rem;
+      max-width: 780px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -207,60 +209,6 @@
       background: var(--black);
       color: white;
       transform: translateY(-2px);
-    }
-
-    .hero-right {
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      opacity: 0;
-      animation: fadeIn 1.1s ease 0.3s forwards;
-    }
-
-    .hero-right img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 25%;
-      display: block;
-      transform: scale(1.02);
-      transition: transform 6s ease;
-    }
-    .hero:hover .hero-right img { transform: scale(1.08); }
-
-    .hero-right::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(10,10,10,0.65) 0%, rgba(10,10,10,0.05) 45%, rgba(233,84,32,0.12) 100%);
-      z-index: 1;
-    }
-
-    .hero-right-caption {
-      position: relative;
-      z-index: 2;
-      padding: 2.2rem 2.5rem;
-      width: 100%;
-    }
-    .hero-right-caption p {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-    }
-    .hero-right-caption p::before {
-      content: '';
-      display: inline-block;
-      width: 1.4rem; height: 1px;
-      background: var(--orange);
     }
 
     .hero-stats {
@@ -837,9 +785,8 @@
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
-      .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-left { padding: 7rem 1.5rem 3rem; }
-      .hero-right { display: none; }
+      .hero { min-height: auto; }
+      .hero-left { padding: 7rem 1.5rem 3rem; max-width: 100%; }
       .section-what, .section-who, .section-why, .section-portfolio, .section-cta, .section-video, .section-about, .section-experience, .section-samples, .section-code, .section-tools, .section-packages, .section-value {
         padding: 5rem 1.5rem;
       }
@@ -900,10 +847,23 @@
         </div>
       </div>
     </div>
-    <div class="hero-right">
-      <img src="assets/jane2.jpg" alt="Jane Kenda, founder of OpsWithJane">
-      <div class="hero-right-caption">
-        <p>Clarity · Structure · Systems</p>
+  </section>
+
+  <!-- VALUE STRIP -->
+  <section class="section-value">
+    <p class="value-title reveal">What would you do with the time back? <em>Grow the business. Or step away from the desk.</em></p>
+    <div class="value-grid">
+      <div class="value-card reveal">
+        <div class="value-hours">10 hrs</div>
+        <div class="value-desc">Back in your week — enough to close a new client, ship the offer you've been sitting on, or just leave the laptop at 5pm.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-hours">20 hrs</div>
+        <div class="value-desc">Back in your month — space to plan your next quarter instead of firefighting admin every day.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-hours">80 hrs</div>
+        <div class="value-desc">Back in your month, enough for a full right hand operator running the business day to day, so you get to focus on strategy, growth, or your family.</div>
       </div>
     </div>
   </section>
@@ -940,7 +900,7 @@
     <div class="video-frame reveal">
       <!-- Once the real Loom embed link is pasted into the iframe src below, delete this .video-poster div -->
       <div class="video-poster">
-        <img src="assets/jane1.jpg" alt="Jane Kenda intro video thumbnail">
+        <img src="assets/Jane1.jpg" alt="Jane Kenda intro video thumbnail">
         <div class="video-play-btn">▶</div>
       </div>
       <!-- PASTE YOUR LOOM EMBED LINK HERE (replace the src below) -->
@@ -973,25 +933,6 @@
       <div class="reveal">
         <div class="about-fact-number">100%</div>
         <div class="about-fact-label">Remote-native career. Async communication and clean documentation come naturally, not as an adjustment.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- VALUE STRIP -->
-  <section class="section-value">
-    <p class="value-title reveal">What would you do with the time back? <em>Grow the business. Or step away from the desk.</em></p>
-    <div class="value-grid">
-      <div class="value-card reveal">
-        <div class="value-hours">10 hrs</div>
-        <div class="value-desc">Back in your week — enough to close a new client, ship the offer you've been sitting on, or just leave the laptop at 5pm.</div>
-      </div>
-      <div class="value-card reveal">
-        <div class="value-hours">20 hrs</div>
-        <div class="value-desc">Back in your month — space to plan your next quarter instead of firefighting admin every day.</div>
-      </div>
-      <div class="value-card reveal">
-        <div class="value-hours">40 hrs</div>
-        <div class="value-desc">Back in your month — a full extra work-week you get to spend on strategy, growth, or your family.</div>
       </div>
     </div>
   </section>
