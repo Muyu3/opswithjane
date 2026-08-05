@@ -952,16 +952,14 @@
     <h2 class="section-title reveal">A quick hello,<br><em>before we talk business.</em></h2>
     <p class="video-sub reveal">A short introduction so you know exactly who's behind the systems before we ever hop on a call.</p>
     <div class="video-frame reveal">
-      <!-- Once the real Loom embed link is pasted into the iframe src below, delete this .video-poster div -->
-      <div class="video-poster">
+      <div class="video-poster" id="videoPoster" onclick="playIntroVideo()">
         <img src="assets/Jane1.jpg" alt="Jane Kenda intro video thumbnail">
         <div class="video-play-btn">▶</div>
       </div>
-      <!-- PASTE YOUR LOOM EMBED LINK HERE (replace the src below) -->
-      <iframe src="https://www.youtube.com/embed/d_aUUEW_2-M" allow="autoplay" allowfullscreen></iframe>
+      <iframe id="introVideoFrame" data-src="https://www.youtube.com/embed/d_aUUEW_2-M?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
   </section>
-
+  
   <!-- ABOUT -->
   <section class="section-about" id="about">
     <div>
@@ -1485,6 +1483,14 @@
       });
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
+  </script>
+  <script>
+    function playIntroVideo() {
+      const frame = document.getElementById('introVideoFrame');
+      const poster = document.getElementById('videoPoster');
+      frame.src = frame.dataset.src;
+      poster.style.display = 'none';
+    }
   </script>
 </body>
 </html>
