@@ -21,8 +21,9 @@ h1 em,h2 em{font-style:italic;color:var(--brown2)}
 .btn-s:hover{background:var(--pink)}
 nav{position:sticky;top:0;z-index:50;background:rgba(251,248,244,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:60px;flex-wrap:wrap;padding-top:.4rem;padding-bottom:.4rem}
-.logo{font-family:var(--serif);font-weight:700;font-size:1.2rem;text-decoration:none}
-.logo span{color:var(--pink2)}
+.logo{text-decoration:none;display:inline-flex;align-items:baseline;gap:.35rem;border-left:3px solid var(--brown2);padding-left:.55rem}
+.logo b{font-family:var(--serif);font-weight:700;font-size:1.3rem}
+.logo span{font-family:var(--sans);font-weight:500;font-size:1rem;color:var(--brown2)}
 nav ul{display:flex;gap:1.2rem;list-style:none;align-items:center;flex-wrap:wrap}
 nav ul a{font-size:.84rem;font-weight:500;text-decoration:none;padding:.2rem 0;border-bottom:2px solid transparent}
 nav ul a:hover,nav ul a[aria-current]{border-bottom-color:var(--pink2)}
@@ -114,3 +115,7 @@ footer a{margin-left:0}
 .terms ul{list-style:none}
 .terms li{padding-left:1.1rem;position:relative;margin-bottom:.3rem}
 .terms li::before{content:"+";position:absolute;left:0;color:var(--brown2);font-weight:700}
+.quote{margin:0;display:flex;flex-direction:column;justify-content:space-between;gap:.9rem}
+.quote blockquote p{color:var(--ink);font-size:.95rem}
+.quote blockquote p::before{content:"\201C";font-family:var(--serif);font-size:2.2rem;line-height:.6;color:var(--brown2);display:block;margin-bottom:.5rem}
+.quote figcaption{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brown2)}
