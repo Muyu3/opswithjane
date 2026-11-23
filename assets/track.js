@@ -61,7 +61,7 @@
     if(document.getElementById('owj-cc'))return;
     css();
     var d=document.createElement('div');d.id='owj-cc';d.setAttribute('role','dialog');d.setAttribute('aria-label','Cookie choice');
-    d.innerHTML='<p>Can I use cookies to see which pages help agency owners most? It tells me what to improve. No ads, and your form answers are never recorded.</p>'+
+    d.innerHTML='<p>Can I use cookies to see which pages help agency owners most? It tells me what to improve. No ads, and your form answers are never recorded. <a href="/privacy">Privacy policy</a></p>'+
       '<div class="row"><button type="button" class="btn btn-p" data-c="granted">That\'s fine</button><button type="button" class="btn" data-c="denied">No thanks</button></div>';
     d.addEventListener('click',function(e){
       var v=e.target.getAttribute&&e.target.getAttribute('data-c');if(!v)return;
